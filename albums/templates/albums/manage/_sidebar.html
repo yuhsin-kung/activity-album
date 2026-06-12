@@ -10,11 +10,11 @@
         <a class="nav-item {% if cur == 'event-create' or cur == 'event-update' %}active{% endif %}"
            href="{% url 'event-create' %}">新增活動</a>
         <a class="nav-item {% if cur == 'member-manage' %}active{% endif %}"
-           href="{% url 'member-manage' %}">人員管理</a>
-        <a class="nav-item" href="{% url 'event-list' %}" target="_blank">瀏覽網站 ↗</a>
+           href="{% url 'member-manage' %}">系學會成員</a>
         {% if request.user.is_superuser %}
-        <a class="nav-item {% if cur == 'teacher-manage' %}active{% endif %}" href="{% url 'teacher-manage' %}">老師管理</a>
+        <a class="nav-item {% if cur == 'teacher-manage' %}active{% endif %}" href="{% url 'teacher-manage' %}">管理者設定</a>
         {% endif %}
+        <a class="nav-item" href="{% url 'event-list' %}" target="_blank">瀏覽網站 ↗</a>
     </nav>
     <div class="sidebar-user">
         <span class="user-avatar">{{ request.user.username|first|upper }}</span>
