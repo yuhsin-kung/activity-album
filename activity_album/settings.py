@@ -134,3 +134,7 @@ else:
 # Login
 # ──────────────────────────────────────────
 LOGIN_URL = '/accounts/login/'
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://web-production-08513.up.railway.app',
+]
