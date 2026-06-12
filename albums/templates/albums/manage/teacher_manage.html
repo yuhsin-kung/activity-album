@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>老師管理 | 資科系活動相簿</title>
+    <title>管理員管理 | 資科系活動相簿</title>
     <link rel="stylesheet" href="{% static 'albums/manage.css' %}?v=2">
 </head>
 <body>
@@ -17,7 +17,7 @@
             <div class="mgmt-header-text">
                 <p class="mgmt-eyebrow">Teachers</p>
                 <h1 class="mgmt-title">管理員</h1>
-                <p class="mgmt-subtitle">授予或移除老師帳號權限</p>
+                <p class="mgmt-subtitle">授予或移除管理員帳號權限</p>
             </div>
         </div>
 
@@ -52,19 +52,19 @@
                                 <p class="member-name">{{ user.first_name|default:user.username }}</p>
                                 <p class="member-meta">{{ user.email|default:"未填寫電子郵件" }}</p>
                             </div>
-                            <span class="member-badge">老師</span>
+                            <span class="member-badge">管理員</span>
                             <form method="post" class="member-action-form">
                                 {% csrf_token %}
                                 <input type="hidden" name="user_id" value="{{ user.pk }}">
                                 <input type="hidden" name="action" value="revoke">
-                                <button class="btn-secondary" type="submit">移除老師身分</button>
+                                <button class="btn-secondary" type="submit">移除管理員身分</button>
                             </form>
                         </div>
                     {% endfor %}
                 </div>
             {% else %}
                 <div class="empty-state compact-empty">
-                    <p>目前沒有老師帳號。</p>
+                    <p>目前沒有管理員帳號。</p>
                 </div>
             {% endif %}
         </section>
@@ -87,7 +87,7 @@
                                 {% csrf_token %}
                                 <input type="hidden" name="user_id" value="{{ user.pk }}">
                                 <input type="hidden" name="action" value="grant">
-                                <button class="btn-primary" type="submit">設為老師</button>
+                                <button class="btn-primary" type="submit">設為管理員</button>
                             </form>
                         </div>
                     {% endfor %}
