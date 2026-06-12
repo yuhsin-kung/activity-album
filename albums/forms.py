@@ -24,12 +24,15 @@ class MemberSignUpForm(UserCreationForm):
 
 
 class EventForm(forms.ModelForm):
+    date = forms.DateField(
+        label='活動日期',
+        widget=forms.DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),
+        input_formats=['%Y-%m-%d'],
+    )
+
     class Meta:
         model = Event
         fields = ['title', 'description', 'date', 'location']
-        widgets = {
-            'date': forms.DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),
-        }
 
 
 class PhotoUploadForm(forms.ModelForm):
