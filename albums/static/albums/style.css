@@ -616,9 +616,13 @@ body {
     .site-nav   { padding: 0 20px; }
     .hero       { padding: 24px 20px 20px; }
     .event-header, .page-header { padding: 36px 20px 28px; }
-    .container  { width: 100%; padding: 0 0 64px; }
+    .event-header h1 { font-size: 1.6rem; }
+    .container  { width: 100%; padding: 0 20px 64px; }
     .event-grid { grid-template-columns: 1fr; }
-    .photo-grid { columns: 2; }
+    .photo-grid { columns: 2; column-gap: 4px; }
+    .doc-list-public { margin: 0; }
+    .doc-item-public { padding: 14px 0; }
+    .back-link  { margin-bottom: 32px; }
 }
 
 /* ── 首頁 Card Grid ─────────────────────── */
