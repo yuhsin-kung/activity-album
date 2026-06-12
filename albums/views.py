@@ -184,10 +184,18 @@ class PhotoManageView(TeacherRequiredMixin, CreateView):
     def get_event(self):
         return get_object_or_404(Event, pk=self.kwargs['event_pk'])
 
-    def form_valid(self, form):
-        form.instance.event = self.get_event()
-        form.instance.uploaded_by = self.request.user
-        return super().form_valid(form)
+    def post(self, request, *args, **kwargs):
+        event = self.get_event()
+        files = request.FILES.getlist('image')
+        caption = request.POST.get('caption', '')
+        for f in files:
+            EventPhoto.objects.create(
+                event=event,
+                image=f,
+                caption=caption,
+                uploaded_by=request.user,
+            )
+        return redirect(reverse('event-media', kwargs={'pk': event.pk}) + '#photos')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
