@@ -71,7 +71,7 @@ class DocumentDownloadView(MemberRequiredMixin, DetailView):
         document = self.get_object()
         return FileResponse(
             document.file.open('rb'),
-            as_attachment=True,
+            as_attachment=False,
             filename=document.filename(),
         )
 
