@@ -80,7 +80,7 @@
                     <p class="mgmt-eyebrow">Documents</p>
                     <h2 class="edit-section-title">附件 <span class="edit-count">{{ documents|length }}</span></h2>
                 </div>
-                <p class="doc-notice-inline">僅限老師及系學會成員查看</p>
+                <p class="doc-notice-inline">僅限管理員及系學會成員查看</p>
             </div>
 
             <form class="inline-upload-form" action="{% url 'document-manage' event.pk %}" method="post" enctype="multipart/form-data">
