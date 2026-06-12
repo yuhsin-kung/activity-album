@@ -29,12 +29,12 @@
 
         <div class="stats-row member-stats">
             <div class="stat-card">
-                <div class="stat-num">{{ pending_users|length }}</div>
-                <div class="stat-label">待審核</div>
+                <div class="stat-num">{{ approved_users|length }}</div>
+                <div class="stat-label">已授權</div>
             </div>
             <div class="stat-card">
-                <div class="stat-num">{{ approved_users|length }}</div>
-                <div class="stat-label">已核准</div>
+                <div class="stat-num">{{ pending_users|length }}</div>
+                <div class="stat-label">未授權</div>
             </div>
         </div>
 
