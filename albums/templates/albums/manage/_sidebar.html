@@ -1,5 +1,10 @@
 {% with cur=request.resolver_match.url_name %}
-<aside class="sidebar">
+<button class="hamburger" id="hamburgerBtn" onclick="toggleSidebar()" aria-label="選單">
+    <span></span><span></span><span></span>
+</button>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<aside class="sidebar" id="sidebar">
     <div class="sidebar-brand">
         <div class="sidebar-brand-name">活動相簿</div>
         <div class="sidebar-brand-sub">Management</div>
@@ -25,4 +30,13 @@
         </form>
     </div>
 </aside>
+
+<script>
+function toggleSidebar() {
+    var sidebar = document.getElementById('sidebar');
+    var overlay = document.getElementById('sidebarOverlay');
+    sidebar.classList.toggle('sidebar-open');
+    overlay.classList.toggle('sidebar-overlay-active');
+}
+</script>
 {% endwith %}

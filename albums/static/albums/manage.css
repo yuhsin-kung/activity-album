@@ -737,28 +737,66 @@ body {
 
 /* ── Responsive ── */
 
+/* ── Hamburger button (hidden on desktop) ── */
+.hamburger {
+    display: none;
+}
+
+/* ── Sidebar overlay ── */
+.sidebar-overlay {
+    display: none;
+}
+
 @media (max-width: 768px) {
-    .mgmt-layout { flex-direction: column; }
-    .sidebar {
+    .hamburger {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 5px;
+        position: fixed;
+        top: 16px;
+        left: 16px;
+        z-index: 300;
+        width: 40px;
+        height: 40px;
+        background: #1a2060;
+        border: none;
+        border-radius: 6px;
+        padding: 8px;
+        cursor: pointer;
+    }
+    .hamburger span {
+        display: block;
         width: 100%;
-        height: auto;
-        position: static;
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-items: center;
+        height: 2px;
+        background: #fff;
+        border-radius: 2px;
     }
-    .sidebar-brand { display: none; }
-    .sidebar-nav {
-        flex-direction: row;
-        flex-wrap: wrap;
-        padding: 8px 12px;
-        gap: 4px;
-        flex: 1;
+    .sidebar-overlay {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.45);
+        z-index: 199;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s;
     }
-    .nav-item { padding: 7px 14px; font-size: 0.78rem; }
-    .sidebar-user { padding: 8px 16px; }
-    .sidebar-user-name { display: none; }
-    .mgmt-main { padding: 24px 20px; }
+    .sidebar-overlay.sidebar-overlay-active {
+        opacity: 1;
+        pointer-events: all;
+    }
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -260px;
+        width: 240px;
+        height: 100vh;
+        z-index: 200;
+        transition: left 0.25s ease;
+    }
+    .sidebar.sidebar-open { left: 0; }
+    .mgmt-main { padding: 24px 20px; padding-top: 72px; }
     .event-table thead { display: none; }
     .event-table tbody tr {
         display: block;
