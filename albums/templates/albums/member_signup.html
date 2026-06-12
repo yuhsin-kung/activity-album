@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>註冊 | 資科系活動相簿</title>
+    <link rel="stylesheet" href="{% static 'albums/style.css' %}?v=4">
+</head>
+<body>
+
+{% include 'albums/_nav.html' %}
+
+<div class="page-header">
+    <p class="page-header-eyebrow">Sign Up</p>
+    <h1>註冊</h1>
+    <p class="page-header-sub">建立帳號，申請系學會成員資格</p>
+</div>
+
+<div class="container">
+
+    <div class="notice-message">
+        註冊後可先登入帳號，但附件需等老師在後台核准系學會成員資格後才會開放。
+    </div>
+
+    <div class="form-panel">
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <p>
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}
+                        <span class="field-help">{{ field.help_text }}</span>
+                    {% endif %}
+                    {% for error in field.errors %}
+                        <span class="field-error">{{ error }}</span>
+                    {% endfor %}
+                </p>
+            {% endfor %}
+            {% if form.non_field_errors %}
+                <div class="form-error">{{ form.non_field_errors }}</div>
+            {% endif %}
+            <div class="form-actions">
+                <button type="submit">送出</button>
+                <a class="secondary-link" href="{% url 'member-login' %}">已有帳號？登入</a>
+            </div>
+        </form>
+    </div>
+
+</div>
+</body>
+</html>

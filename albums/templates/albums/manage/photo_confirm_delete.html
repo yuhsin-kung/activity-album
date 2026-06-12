@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>刪除照片 | 後台管理</title>
+    <link rel="stylesheet" href="{% static 'albums/manage.css' %}?v=2">
+</head>
+<body>
+<div class="mgmt-layout">
+
+    {% include 'albums/manage/_sidebar.html' %}
+
+    <main class="mgmt-main">
+        <div class="mgmt-header">
+            <div class="mgmt-header-text">
+                <p class="mgmt-eyebrow">Delete Photo</p>
+                <h1 class="mgmt-title">刪除照片</h1>
+            </div>
+        </div>
+        <div class="form-card danger-card">
+            {% if object.image %}
+                <img class="delete-preview" src="{{ object.image.url }}" alt="">
+            {% endif %}
+            <h2>確定要刪除這張照片？</h2>
+            {% if object.caption %}<p class="text-muted">「{{ object.caption }}」</p>{% endif %}
+            <p class="text-muted" style="font-size:0.82rem">刪除後無法復原。</p>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-actions" style="justify-content:center">
+                    <button class="btn-danger" type="submit">確認刪除</button>
+                    <a class="btn-secondary" href="{% url 'event-media' object.event.pk %}#photos">取消</a>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+</body>
+</html>

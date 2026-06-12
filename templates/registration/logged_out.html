@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>已登出 | 東吳資料科學系活動相簿</title>
+    <link rel="stylesheet" href="{% static 'albums/style.css' %}?v=8">
+</head>
+<body>
+
+{% include 'albums/_nav.html' %}
+
+<div class="page-header">
+    <p class="page-header-eyebrow">Signed Out</p>
+    <h1>已登出</h1>
+</div>
+
+<div class="container">
+    <div class="form-panel">
+        <div class="form-actions">
+            <a class="btn-link" href="/accounts/login/">重新登入</a>
+            <a class="secondary-link" href="/">回到活動相簿</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

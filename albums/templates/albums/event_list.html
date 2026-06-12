@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>資科系活動相簿</title>
+    <link rel="stylesheet" href="{% static 'albums/style.css' %}?v=8">
+</head>
+<body>
+
+{% include 'albums/_nav.html' %}
+
+<div class="home-wrap">
+
+    <header class="home-head">
+        <h1 class="home-title">活動相簿</h1>
+        {% if events %}<span class="home-sub">{{ events|length }} activities</span>{% endif %}
+    </header>
+
+    {% if events %}
+    <div class="card-grid">
+        {% for event in events %}
+        {% with cover=event.photos.first %}
+        <a class="card" href="{% url 'event-detail' event.id %}">
+            <div class="card-img">
+                {% if cover %}
+                    <img src="{{ cover.image.url }}" alt="{{ event.title }}">
+                {% else %}
+                    <div class="card-img-empty">
+                        <span>{{ event.date|date:"Y.m" }}</span>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="card-body">
+                <p class="card-date">{{ event.date|date:"Y.m.d" }}{% if event.location %} · {{ event.location }}{% endif %}</p>
+                <h2 class="card-title">{{ event.title }}</h2>
+                {% if event.description %}<p class="card-desc">{{ event.description }}</p>{% endif %}
+                <p class="card-count">{{ event.photos.count }} 張照片</p>
+            </div>
+        </a>
+        {% endwith %}
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="home-empty">目前還沒有活動資料。</p>
+    {% endif %}
+
+</div>
+
+</body>
+</html>

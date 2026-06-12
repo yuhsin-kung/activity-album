@@ -1,0 +1,93 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ event.title }} | 資科系活動相簿</title>
+    <link rel="stylesheet" href="{% static 'albums/style.css' %}?v=4">
+</head>
+<body>
+
+{% include 'albums/_nav.html' %}
+
+<div class="event-header">
+    <p class="event-header-eyebrow">
+        {{ event.date|date:"Y.m.d" }}{% if event.location %}&nbsp;·&nbsp;{{ event.location }}{% endif %}
+    </p>
+    <h1>{{ event.title }}</h1>
+    {% if request.user.is_staff %}
+        <div class="event-header-actions">
+            <a class="primary-link" href="{% url 'photo-manage' event.pk %}">管理照片</a>
+            <a class="primary-link" href="{% url 'document-manage' event.pk %}">管理附件</a>
+            <a class="secondary-link" href="{% url 'event-update' event.pk %}">編輯</a>
+            <a class="danger-link" href="{% url 'event-delete' event.pk %}">刪除</a>
+        </div>
+    {% endif %}
+</div>
+
+<div class="container">
+
+    <a class="back-link" href="{% url 'event-list' %}">← 所有活動</a>
+
+    {% if event.description %}
+        <p class="event-description">{{ event.description }}</p>
+    {% endif %}
+
+    <div class="section-rule">照片</div>
+
+    {% if photos %}
+        <div class="photo-grid">
+            {% for photo in photos %}
+                <div class="photo-card">
+                    <img src="{{ photo.image.url }}" alt="{{ photo.caption }}">
+                    {% if photo.caption %}
+                        <div class="photo-card-overlay">
+                            <div class="photo-card-caption">{{ photo.caption }}</div>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">這個活動目前還沒有照片。</div>
+    {% endif %}
+
+    {% if can_view_docs %}
+        <div class="section-rule" style="margin-top:72px">附件</div>
+        <div class="doc-access-notice">🔒 僅限系學會成員及老師查看</div>
+        {% if documents %}
+            <div class="doc-list-public">
+                {% for doc in documents %}
+                    <a class="doc-item-public" href="{% url 'document-download' doc.pk %}">
+                        <span class="doc-ext doc-ext-{{ doc.ext }}">{{ doc.ext|upper|default:"FILE" }}</span>
+                        <div class="doc-info">
+                            <p class="doc-title">{{ doc.title }}</p>
+                            <p class="doc-meta">{{ doc.filename }} · {{ doc.uploaded_at|date:"Y/m/d" }}</p>
+                        </div>
+                        <span class="doc-download-icon">↓</span>
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">目前沒有附件。</div>
+        {% endif %}
+
+    {% elif has_documents %}
+        <div class="section-rule" style="margin-top:72px">附件</div>
+        <div class="doc-access-notice">
+            附件僅限系學會成員及老師查看。
+            {% if request.user.is_authenticated %}
+                您的帳號尚未完成審核，請等待老師核准。
+            {% else %}
+                <a href="{% url 'member-login' %}?next={{ request.path }}">登入</a>
+                或
+                <a href="{% url 'member-signup' %}">註冊</a>
+                後等待老師審核。
+            {% endif %}
+        </div>
+    {% endif %}
+
+</div>
+</body>
+</html>

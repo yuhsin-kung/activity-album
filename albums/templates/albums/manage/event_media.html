@@ -1,0 +1,134 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>照片與附件 | {{ event.title }}</title>
+    <link rel="stylesheet" href="{% static 'albums/manage.css' %}?v=3">
+</head>
+<body>
+<div class="mgmt-layout">
+
+    {% include 'albums/manage/_sidebar.html' %}
+
+    <main class="mgmt-main">
+        <div class="mgmt-header">
+            <div class="mgmt-header-text">
+                <p class="mgmt-eyebrow">{{ event.date|date:"Y.m.d" }}{% if event.location %} · {{ event.location }}{% endif %}</p>
+                <h1 class="mgmt-title">{{ event.title }}</h1>
+            </div>
+            <a class="btn-secondary" href="{% url 'staff-dashboard' %}">← 返回總覽</a>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="mgmt-notice" style="margin-bottom:24px">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- 照片 -->
+        <div class="edit-section" id="photos">
+            <div class="edit-section-header">
+                <div>
+                    <p class="mgmt-eyebrow">Photos</p>
+                    <h2 class="edit-section-title">照片 <span class="edit-count">{{ photos|length }}</span></h2>
+                </div>
+            </div>
+
+            <form class="inline-upload-form" action="{% url 'photo-manage' event.pk %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="inline-upload-row">
+                    <div class="form-field inline-field">
+                        <label for="id_image">選擇照片 <span class="field-required">必填</span></label>
+                        <input type="file" id="id_image" name="image" accept="image/*" required>
+                    </div>
+                    <div class="form-field inline-field" style="flex:2">
+                        <label for="id_caption">說明 <span class="field-hint">選填</span></label>
+                        <input type="text" id="id_caption" name="caption"
+                               placeholder="例：大合照、頒獎…" maxlength="300">
+                    </div>
+                    <button class="btn-primary inline-upload-btn" type="submit">上傳</button>
+                </div>
+            </form>
+
+            {% if photos %}
+                <div class="photo-mgmt-grid">
+                    {% for photo in photos %}
+                        <div class="photo-mgmt-card">
+                            <div class="photo-mgmt-img">
+                                <img src="{{ photo.image.url }}" alt="{{ photo.caption }}">
+                            </div>
+                            <div class="photo-mgmt-body">
+                                <p class="photo-caption">{{ photo.caption|default:"—" }}</p>
+                                <a class="btn-action btn-delete" href="{% url 'photo-delete' event.pk photo.pk %}">刪除</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state compact-empty">
+                    <p>尚無照片，使用上方表單上傳。</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- 附件 -->
+        <div class="edit-section" id="documents">
+            <div class="edit-section-header">
+                <div>
+                    <p class="mgmt-eyebrow">Documents</p>
+                    <h2 class="edit-section-title">附件 <span class="edit-count">{{ documents|length }}</span></h2>
+                </div>
+                <p class="doc-notice-inline">僅限老師及系學會成員查看</p>
+            </div>
+
+            <form class="inline-upload-form" action="{% url 'document-manage' event.pk %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="inline-upload-row">
+                    <div class="form-field inline-field">
+                        <label for="id_file">選擇檔案 <span class="field-required">必填</span></label>
+                        <input type="file" id="id_file" name="file" required>
+                    </div>
+                    <div class="form-field inline-field" style="flex:2">
+                        <label for="id_doc_title">附件名稱 <span class="field-hint">選填</span></label>
+                        <input type="text" id="id_doc_title" name="title"
+                               placeholder="例：2024 迎新茶會企劃書" maxlength="200">
+                    </div>
+                    <button class="btn-primary inline-upload-btn" type="submit">上傳</button>
+                </div>
+            </form>
+
+            {% if documents %}
+                <div class="doc-list">
+                    {% for doc in documents %}
+                        <div class="doc-item">
+                            <span class="doc-ext doc-ext-{{ doc.ext }}">{{ doc.ext|upper|default:"FILE" }}</span>
+                            <div class="doc-info">
+                                <p class="doc-title">{{ doc.title }}</p>
+                                <p class="doc-meta">{{ doc.filename }}{% if doc.uploaded_at %} · {{ doc.uploaded_at|date:"Y/m/d" }}{% endif %}</p>
+                            </div>
+                            <div class="doc-actions">
+                                <a class="btn-action btn-photo" href="{{ doc.file.url }}" target="_blank" download>下載</a>
+                                <a class="btn-action btn-delete" href="{% url 'document-delete' event.pk doc.pk %}">刪除</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state compact-empty">
+                    <p>尚無附件，使用上方表單上傳。</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- 完成 -->
+        <div class="done-section">
+            <a class="btn-primary" href="{% url 'staff-dashboard' %}">完成，返回總覽</a>
+            <a class="btn-secondary" href="{% url 'event-update' event.pk %}">修改活動資訊</a>
+        </div>
+
+    </main>
+</div>
+</body>
+</html>

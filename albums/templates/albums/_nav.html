@@ -1,0 +1,18 @@
+{% load static %}
+<nav class="site-nav">
+    <a class="site-nav-brand" href="{% url 'event-list' %}">東吳資料科學系活動相簿</a>
+    <div class="site-nav-right">
+        {% if request.user.is_staff %}
+            <a class="nav-link" href="{% url 'staff-dashboard' %}">後台管理</a>
+        {% elif request.user.is_authenticated %}
+            <span class="nav-user">{{ request.user.username }}</span>
+            <form method="post" action="{% url 'member-logout' %}" class="nav-logout-form">
+                {% csrf_token %}
+                <button class="nav-link nav-link-btn" type="submit">登出</button>
+            </form>
+        {% else %}
+            <a class="nav-link" href="{% url 'member-login' %}">登入</a>
+            <a class="nav-link nav-link-fill" href="{% url 'member-signup' %}">註冊</a>
+        {% endif %}
+    </div>
+</nav>

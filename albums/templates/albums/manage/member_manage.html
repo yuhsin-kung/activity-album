@@ -1,0 +1,106 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>人員管理 | 資科系活動相簿</title>
+    <link rel="stylesheet" href="{% static 'albums/manage.css' %}?v=2">
+</head>
+<body>
+<div class="mgmt-layout">
+
+    {% include 'albums/manage/_sidebar.html' %}
+
+    <main class="mgmt-main">
+        <div class="mgmt-header">
+            <div class="mgmt-header-text">
+                <p class="mgmt-eyebrow">Members</p>
+                <h1 class="mgmt-title">人員管理</h1>
+                <p class="mgmt-subtitle">核准系學會帳號，或移除附件查看權限</p>
+            </div>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="mgmt-notice">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="stats-row member-stats">
+            <div class="stat-card">
+                <div class="stat-num">{{ pending_users|length }}</div>
+                <div class="stat-label">待審核</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">{{ approved_users|length }}</div>
+                <div class="stat-label">已核准</div>
+            </div>
+        </div>
+
+        <section class="member-section">
+            <div class="member-section-header">
+                <p class="mgmt-eyebrow">Pending</p>
+                <h2>待審核帳號</h2>
+            </div>
+
+            {% if pending_users %}
+                <div class="member-list">
+                    {% for user in pending_users %}
+                        <div class="member-row">
+                            <div class="member-avatar">{{ user.username|first|upper }}</div>
+                            <div class="member-info">
+                                <p class="member-name">{{ user.first_name|default:user.username }}</p>
+                                <p class="member-meta">{{ user.email|default:"未填寫電子郵件" }}</p>
+                            </div>
+                            <form method="post" class="member-action-form">
+                                {% csrf_token %}
+                                <input type="hidden" name="user_id" value="{{ user.pk }}">
+                                <input type="hidden" name="action" value="approve">
+                                <button class="btn-primary" type="submit">核准會員</button>
+                            </form>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state compact-empty">
+                    <p>目前沒有待審核帳號。</p>
+                </div>
+            {% endif %}
+        </section>
+
+        <section class="member-section">
+            <div class="member-section-header">
+                <p class="mgmt-eyebrow">Approved</p>
+                <h2>已核准會員</h2>
+            </div>
+
+            {% if approved_users %}
+                <div class="member-list">
+                    {% for user in approved_users %}
+                        <div class="member-row">
+                            <div class="member-avatar approved">{{ user.username|first|upper }}</div>
+                            <div class="member-info">
+                                <p class="member-name">{{ user.first_name|default:user.username }}</p>
+                                <p class="member-meta">{{ user.email|default:"未填寫電子郵件" }}</p>
+                            </div>
+                            <span class="member-badge">系學會成員</span>
+                            <form method="post" class="member-action-form">
+                                {% csrf_token %}
+                                <input type="hidden" name="user_id" value="{{ user.pk }}">
+                                <input type="hidden" name="action" value="revoke">
+                                <button class="btn-secondary" type="submit">移除資格</button>
+                            </form>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state compact-empty">
+                    <p>目前沒有已核准會員。</p>
+                </div>
+            {% endif %}
+        </section>
+    </main>
+</div>
+</body>
+</html>

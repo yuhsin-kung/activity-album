@@ -1,0 +1,70 @@
+import os
+from django.db import models
+from django.contrib.auth.models import User
+
+
+class Event(models.Model):
+    title = models.CharField(max_length=200)          # 活動名稱
+    description = models.TextField(blank=True)        # 活動說明
+    date = models.DateField()                         # 活動日期
+    location = models.CharField(max_length=200, blank=True)  # 活動地點
+    created_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='events',
+    )                                                  # 建立活動的老師
+    created_at = models.DateTimeField(auto_now_add=True)  # 建立時間
+
+    class Meta:
+        ordering = ['-date']
+
+    def __str__(self):
+        return self.title
+
+
+class EventPhoto(models.Model):
+    event = models.ForeignKey(
+        Event,
+        on_delete=models.CASCADE,
+        related_name='photos'
+    )                                                  # 這張照片屬於哪個活動
+    image = models.ImageField(upload_to='events/%Y/%m/')  # 照片
+    caption = models.CharField(max_length=300, blank=True)  # 照片說明
+    uploaded_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )                                                  # 上傳照片的老師
+    uploaded_at = models.DateTimeField(auto_now_add=True)   # 上傳時間
+
+    def __str__(self):
+        return f'{self.event.title} - {self.uploaded_at}'
+
+
+class EventDocument(models.Model):
+    event = models.ForeignKey(
+        Event,
+        on_delete=models.CASCADE,
+        related_name='documents',
+    )
+    title = models.CharField(max_length=200, blank=True)
+    file = models.FileField(upload_to='documents/%Y/%m/')
+    uploaded_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def filename(self):
+        return os.path.basename(self.file.name)
+
+    def ext(self):
+        return os.path.splitext(self.file.name)[1].lower().lstrip('.')
+
+    def __str__(self):
+        return f'{self.event.title} - {self.title}'

@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% if object %}編輯活動{% else %}新增活動{% endif %} | 後台管理</title>
+    <link rel="stylesheet" href="{% static 'albums/manage.css' %}?v=3">
+</head>
+<body>
+<div class="mgmt-layout">
+
+    {% include 'albums/manage/_sidebar.html' %}
+
+    <main class="mgmt-main">
+        <div class="mgmt-header">
+            <div class="mgmt-header-text">
+                <p class="mgmt-eyebrow">{% if object %}Edit Event{% else %}New Event{% endif %}</p>
+                <h1 class="mgmt-title">{% if object %}編輯活動{% else %}新增活動{% endif %}</h1>
+            </div>
+            <a class="btn-secondary" href="{% url 'staff-dashboard' %}">← 返回總覽</a>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="mgmt-notice" style="max-width:680px;margin:0 auto 24px;">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="form-card">
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="form-field">
+                    <label for="id_title">活動名稱 <span class="field-required">必填</span></label>
+                    <input type="text" id="id_title" name="title"
+                           value="{{ form.title.value|default:'' }}"
+                           placeholder="例：2024 年系上迎新茶會" maxlength="200" required>
+                    {% if form.title.errors %}<p class="field-error">{{ form.title.errors.0 }}</p>{% endif %}
+                </div>
+
+                <div class="form-field">
+                    <label for="id_date">活動日期 <span class="field-required">必填</span></label>
+                    <input type="date" id="id_date" name="date"
+                           value="{{ form.date.value|default:'' }}" required>
+                    {% if form.date.errors %}<p class="field-error">{{ form.date.errors.0 }}</p>{% endif %}
+                </div>
+
+                <div class="form-field">
+                    <label for="id_location">活動地點 <span class="field-hint">選填</span></label>
+                    <input type="text" id="id_location" name="location"
+                           value="{{ form.location.value|default:'' }}"
+                           placeholder="例：系館 B101" maxlength="200">
+                </div>
+
+                <div class="form-field">
+                    <label for="id_description">活動說明 <span class="field-hint">選填</span></label>
+                    <textarea id="id_description" name="description"
+                              placeholder="簡短描述這個活動的內容…">{{ form.description.value|default:'' }}</textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn-primary" type="submit">
+                        {% if object %}儲存變更{% else %}建立活動並繼續{% endif %}
+                    </button>
+                    {% if object %}
+                        <a class="btn-secondary" href="{% url 'event-media' object.pk %}">管理照片與附件 →</a>
+                    {% else %}
+                        <a class="btn-secondary" href="{% url 'staff-dashboard' %}">取消</a>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+</body>
+</html>

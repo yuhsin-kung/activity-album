@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>管理照片 | {{ event.title }}</title>
+    <link rel="stylesheet" href="{% static 'albums/manage.css' %}?v=2">
+</head>
+<body>
+<div class="mgmt-layout">
+
+    {% include 'albums/manage/_sidebar.html' %}
+
+    <main class="mgmt-main">
+        <div class="mgmt-header">
+            <div class="mgmt-header-text">
+                <p class="mgmt-eyebrow">Photo Management</p>
+                <h1 class="mgmt-title">{{ event.title }}</h1>
+                <p class="mgmt-subtitle">{{ event.date }}{% if event.location %} · {{ event.location }}{% endif %}</p>
+            </div>
+            <a class="btn-secondary" href="{% url 'staff-dashboard' %}">← 返回總覽</a>
+        </div>
+
+        <div class="form-card upload-card">
+            <p class="section-title">上傳照片</p>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="upload-row">
+                    <div class="form-field" style="flex:1;min-width:160px">
+                        <label for="id_image">選擇檔案 <span class="field-required">必填</span></label>
+                        <input type="file" id="id_image" name="image" accept="image/*" required>
+                    </div>
+                    <div class="form-field" style="flex:2;min-width:200px">
+                        <label for="id_caption">照片說明 <span class="field-hint">選填</span></label>
+                        <input type="text" id="id_caption" name="caption"
+                               placeholder="例：大合照、頒獎典禮…" maxlength="300">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn-primary" type="submit">上傳</button>
+                </div>
+            </form>
+        </div>
+
+        <p class="section-title">現有照片（{{ photos|length }} 張）</p>
+
+        {% if photos %}
+            <div class="photo-mgmt-grid">
+                {% for photo in photos %}
+                    <div class="photo-mgmt-card">
+                        <div class="photo-mgmt-img">
+                            <img src="{{ photo.image.url }}" alt="{{ photo.caption }}">
+                        </div>
+                        <div class="photo-mgmt-body">
+                            <p class="photo-caption">{{ photo.caption|default:"—" }}</p>
+                            <a class="btn-action btn-delete" href="{% url 'photo-delete' event.pk photo.pk %}">刪除</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">—</div>
+                <p>尚無照片，使用上方表單上傳。</p>
+            </div>
+        {% endif %}
+    </main>
+</div>
+</body>
+</html>

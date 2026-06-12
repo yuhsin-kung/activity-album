@@ -1,0 +1,287 @@
+{% load i18n static %}
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>登入 | 資科系活動相簿後台</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background-color: #fafaf8;
+            font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+            color: #1a1a2e;
+            line-height: 1.8;
+        }
+
+        .login-header {
+            min-height: 260px;
+            padding: 64px 72px 56px;
+            background: #1a2060;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .login-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(43,57,144,0.9) 0%, rgba(20,28,90,0.95) 100%);
+            z-index: 0;
+        }
+
+        .login-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #7a3fa0, #c04080, #7a3fa0, transparent);
+            z-index: 1;
+        }
+
+        .login-eyebrow {
+            position: relative;
+            z-index: 1;
+            margin: 0 0 12px;
+            color: rgba(255,255,255,0.55);
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+        }
+
+        .login-header h1 {
+            position: relative;
+            z-index: 1;
+            margin: 0;
+            font-family: "Noto Serif TC", "Microsoft JhengHei", serif;
+            color: white;
+            font-size: 2.4rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            line-height: 1.3;
+        }
+
+        .login-header p {
+            z-index: 1;
+            position: relative;
+            margin: 8px 0 0;
+            color: rgba(255,255,255,0.65);
+            font-size: 0.88rem;
+            font-weight: 300;
+            letter-spacing: 0.06em;
+        }
+
+        .login-wrap {
+            width: 86%;
+            max-width: 1040px;
+            margin: 64px auto;
+        }
+
+        .section-label {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 36px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e4f0;
+        }
+
+        .section-label-en {
+            font-size: 0.68rem;
+            font-weight: 500;
+            letter-spacing: 0.3em;
+            color: #2b3990;
+            text-transform: uppercase;
+        }
+
+        .section-label-title {
+            font-family: "Noto Serif TC", "Microsoft JhengHei", serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            color: #1a1a2e;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 660px;
+            background: white;
+            border: 1px solid #e0e4f0;
+            border-radius: 4px;
+            padding: 40px;
+        }
+
+        .login-body {
+            padding: 0;
+        }
+
+        .field-row {
+            margin-bottom: 24px;
+        }
+
+        .field-row label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.78rem;
+            color: #5a6080;
+            margin-bottom: 8px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .field-row input {
+            width: 100%;
+            border: none;
+            border-bottom: 1px solid #d0d4e8;
+            border-radius: 0;
+            padding: 10px 2px;
+            font-size: 0.97rem;
+            font-family: inherit;
+            color: #1a1a2e;
+            background: transparent;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .field-row input:focus {
+            border-bottom-color: #2b3990;
+            border-bottom-width: 2px;
+        }
+
+        .submit-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+            padding: 11px 28px;
+            background: #2b3990;
+            color: white;
+            border: none;
+            border-radius: 2px;
+            font-size: 0.82rem;
+            font-family: inherit;
+            font-weight: 500;
+            cursor: pointer;
+            letter-spacing: 0.12em;
+            box-shadow: 0 2px 12px rgba(43,57,144,0.3);
+            transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+        }
+
+        .submit-btn:hover {
+            background: #1e2d82;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(43,57,144,0.4);
+        }
+
+        .error-msg {
+            background: #fff0f5;
+            color: #c04080;
+            border: 1px solid #f0c8d8;
+            border-left: 3px solid #c04080;
+            border-radius: 3px;
+            padding: 11px 14px;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 28px;
+            color: #8890b8;
+            font-size: 0.78rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: color 0.2s, gap 0.2s;
+        }
+
+        .back-link:hover {
+            color: #2b3990;
+            gap: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .login-header {
+                min-height: 200px;
+                padding: 48px 28px 40px;
+            }
+            .login-header h1 {
+                font-size: 1.7rem;
+            }
+            .login-wrap {
+                width: 92%;
+                margin: 40px auto;
+            }
+            .login-card {
+                padding: 28px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="login-header">
+        <p class="login-eyebrow">SOOCHOW UNIVERSITY・DEPARTMENT OF DATA SCIENCE</p>
+        <h1>資科系活動相簿後台</h1>
+        <p>請使用老師帳號登入</p>
+    </header>
+
+    <main class="login-wrap">
+        <div class="section-label">
+            <span class="section-label-en">ADMIN LOGIN</span>
+            <span class="section-label-title">管理者登入</span>
+        </div>
+
+        <div class="login-card">
+        <div class="login-body">
+            <form method="post" action="{{ request.get_full_path }}">
+                {% csrf_token %}
+
+                {% if form.errors %}
+                    <div class="error-msg">
+                        帳號或密碼錯誤，請重新輸入。
+                    </div>
+                {% endif %}
+
+                {% if form.non_field_errors %}
+                    <div class="error-msg">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <div class="field-row">
+                    <label for="id_username">使用者名稱</label>
+                    <input type="text" id="id_username" name="username"
+                           value="{{ form.username.value|default:'' }}"
+                           autofocus autocomplete="username" required>
+                </div>
+
+                <div class="field-row">
+                    <label for="id_password">密碼</label>
+                    <input type="password" id="id_password" name="password"
+                           autocomplete="current-password" required>
+                </div>
+
+                <input type="hidden" name="next" value="{% if next and next != '/admin/' %}{{ next }}{% else %}{% url 'staff-dashboard' %}{% endif %}">
+
+                <button class="submit-btn" type="submit">登入</button>
+            </form>
+
+            <a class="back-link" href="/">← 回到活動相簿</a>
+        </div>
+    </div>
+    </main>
+</body>
+</html>
