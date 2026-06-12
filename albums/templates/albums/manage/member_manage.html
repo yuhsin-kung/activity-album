@@ -40,39 +40,8 @@
 
         <section class="member-section">
             <div class="member-section-header">
-                <p class="mgmt-eyebrow">Pending</p>
-                <h2>待審核帳號</h2>
-            </div>
-
-            {% if pending_users %}
-                <div class="member-list">
-                    {% for user in pending_users %}
-                        <div class="member-row">
-                            <div class="member-avatar">{{ user.username|first|upper }}</div>
-                            <div class="member-info">
-                                <p class="member-name">{{ user.first_name|default:user.username }}</p>
-                                <p class="member-meta">{{ user.email|default:"未填寫電子郵件" }}</p>
-                            </div>
-                            <form method="post" class="member-action-form">
-                                {% csrf_token %}
-                                <input type="hidden" name="user_id" value="{{ user.pk }}">
-                                <input type="hidden" name="action" value="approve">
-                                <button class="btn-primary" type="submit">核准會員</button>
-                            </form>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <div class="empty-state compact-empty">
-                    <p>目前沒有未授權帳號。</p>
-                </div>
-            {% endif %}
-        </section>
-
-        <section class="member-section">
-            <div class="member-section-header">
                 <p class="mgmt-eyebrow">Approved</p>
-                <h2>已核准帳號</h2>
+                <h2>系學會成員</h2>
             </div>
 
             {% if approved_users %}
@@ -97,6 +66,37 @@
             {% else %}
                 <div class="empty-state compact-empty">
                     <p>目前沒有系學會成員。</p>
+                </div>
+            {% endif %}
+        </section>
+
+        <section class="member-section">
+            <div class="member-section-header">
+                <p class="mgmt-eyebrow">Pending</p>
+                <h2>未授權帳號</h2>
+            </div>
+
+            {% if pending_users %}
+                <div class="member-list">
+                    {% for user in pending_users %}
+                        <div class="member-row">
+                            <div class="member-avatar">{{ user.username|first|upper }}</div>
+                            <div class="member-info">
+                                <p class="member-name">{{ user.first_name|default:user.username }}</p>
+                                <p class="member-meta">{{ user.email|default:"未填寫電子郵件" }}</p>
+                            </div>
+                            <form method="post" class="member-action-form">
+                                {% csrf_token %}
+                                <input type="hidden" name="user_id" value="{{ user.pk }}">
+                                <input type="hidden" name="action" value="approve">
+                                <button class="btn-primary" type="submit">核准會員</button>
+                            </form>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state compact-empty">
+                    <p>目前沒有未授權帳號。</p>
                 </div>
             {% endif %}
         </section>
