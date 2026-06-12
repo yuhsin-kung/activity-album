@@ -12,6 +12,9 @@
         <a class="nav-item {% if cur == 'member-manage' %}active{% endif %}"
            href="{% url 'member-manage' %}">人員管理</a>
         <a class="nav-item" href="{% url 'event-list' %}" target="_blank">瀏覽網站 ↗</a>
+        {% if request.user.is_superuser %}
+        <a class="nav-item" href="/admin/auth/user/" target="_blank">帳號管理 ↗</a>
+        {% endif %}
     </nav>
     <div class="sidebar-user">
         <span class="user-avatar">{{ request.user.username|first|upper }}</span>
