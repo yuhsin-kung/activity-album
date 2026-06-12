@@ -238,3 +238,42 @@ class DocumentDeleteView(TeacherRequiredMixin, DeleteView):
 
     def get_success_url(self):
         return reverse('event-media', kwargs={'pk': self.object.event.pk}) + '#documents'
+
+
+class TeacherManagementView(TeacherRequiredMixin, ListView):
+    model = User
+    template_name = 'albums/manage/teacher_manage.html'
+    context_object_name = 'users'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_superuser:
+            from django.core.exceptions import PermissionDenied
+            raise PermissionDenied
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return (
+            User.objects
+            .filter(is_superuser=False)
+            .order_by('date_joined', 'username')
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        users = list(context['users'])
+        context['teacher_users'] = [u for u in users if u.is_staff]
+        context['non_teacher_users'] = [u for u in users if not u.is_staff]
+        return context
+
+    def post(self, request, *args, **kwargs):
+        user = get_object_or_404(User, pk=request.POST.get('user_id'), is_superuser=False)
+        action = request.POST.get('action')
+        if action == 'grant':
+            user.is_staff = True
+            user.save()
+            messages.success(request, f'已將 {user.username} 設為老師。')
+        elif action == 'revoke':
+            user.is_staff = False
+            user.save()
+            messages.success(request, f'已移除 {user.username} 的老師身分。')
+        return redirect('teacher-manage')

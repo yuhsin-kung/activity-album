@@ -16,6 +16,7 @@ urlpatterns = [
     # 老師後台
     path('manage/', views.StaffDashboardView.as_view(), name='staff-dashboard'),
     path('manage/members/', views.MemberManagementView.as_view(), name='member-manage'),
+    path('manage/teachers/', views.TeacherManagementView.as_view(), name='teacher-manage'),
     path('manage/create/', views.EventCreateView.as_view(), name='event-create'),
     path('manage/<int:pk>/edit/', views.EventUpdateView.as_view(), name='event-update'),
     path('manage/<int:pk>/media/', views.EventMediaView.as_view(), name='event-media'),
