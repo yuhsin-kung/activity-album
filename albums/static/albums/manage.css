@@ -738,8 +738,27 @@ body {
 /* ── Responsive ── */
 
 @media (max-width: 768px) {
-    .sidebar { display: none; }
-    .mgmt-main { padding: 28px 20px; }
+    .mgmt-layout { flex-direction: column; }
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: static;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+    .sidebar-brand { display: none; }
+    .sidebar-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding: 8px 12px;
+        gap: 4px;
+        flex: 1;
+    }
+    .nav-item { padding: 7px 14px; font-size: 0.78rem; }
+    .sidebar-user { padding: 8px 16px; }
+    .sidebar-user-name { display: none; }
+    .mgmt-main { padding: 24px 20px; }
     .event-table thead { display: none; }
     .event-table tbody tr {
         display: block;
