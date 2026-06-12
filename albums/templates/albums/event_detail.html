@@ -55,7 +55,7 @@
 
     {% if can_view_docs %}
         <div class="section-rule" style="margin-top:72px">附件</div>
-        <div class="doc-access-notice">🔒 僅限系學會成員及老師查看</div>
+        <div class="doc-access-notice">🔒 僅限管理員及系學會成員查看</div>
         {% if documents %}
             <div class="doc-list-public">
                 {% for doc in documents %}
@@ -76,7 +76,7 @@
     {% elif has_documents %}
         <div class="section-rule" style="margin-top:72px">附件</div>
         <div class="doc-access-notice">
-            附件僅限系學會成員及老師查看。
+            附件僅限管理員及系學會成員查看。
             {% if request.user.is_authenticated %}
                 您的帳號尚未完成審核，請等待老師核准。
             {% else %}
