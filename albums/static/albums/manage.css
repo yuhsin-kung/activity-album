@@ -796,6 +796,7 @@ body {
         transition: left 0.25s ease;
     }
     .sidebar.sidebar-open { left: 0; }
+    .hamburger.hidden { display: none; }
     .mgmt-main { padding: 24px 20px; padding-top: 72px; }
     .event-table thead { display: none; }
     .event-table tbody tr {
