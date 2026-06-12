@@ -42,7 +42,7 @@
                 <div class="form-field">
                     <label for="id_date">活動日期 <span class="field-required">必填</span></label>
                     <input type="date" id="id_date" name="date"
-                           value="{{ form.date.value|default:'' }}" required>
+                           value="{{ form.date.value|date:'Y-m-d'|default:'' }}" required>
                     {% if form.date.errors %}<p class="field-error">{{ form.date.errors.0 }}</p>{% endif %}
                 </div>
 
