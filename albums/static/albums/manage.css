@@ -737,55 +737,52 @@ body {
 
 /* ── Responsive ── */
 
-/* ── Hamburger button (hidden on desktop) ── */
+/* ── Hamburger button — always fixed, hidden on desktop ── */
 .hamburger {
     display: none;
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 300;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 40px;
+    height: 40px;
+    background: #1a2060;
+    border: none;
+    border-radius: 6px;
+    padding: 8px;
+    cursor: pointer;
 }
+.hamburger span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: #fff;
+    border-radius: 2px;
+}
+.hamburger.hidden { display: none !important; }
 
-/* ── Sidebar overlay ── */
+/* ── Sidebar overlay — always fixed, hidden until active ── */
 .sidebar-overlay {
     display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 199;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+}
+.sidebar-overlay.sidebar-overlay-active {
+    opacity: 1;
+    pointer-events: all;
 }
 
 @media (max-width: 768px) {
-    .hamburger {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        gap: 5px;
-        position: fixed;
-        top: 16px;
-        left: 16px;
-        z-index: 300;
-        width: 40px;
-        height: 40px;
-        background: #1a2060;
-        border: none;
-        border-radius: 6px;
-        padding: 8px;
-        cursor: pointer;
-    }
-    .hamburger span {
-        display: block;
-        width: 100%;
-        height: 2px;
-        background: #fff;
-        border-radius: 2px;
-    }
-    .sidebar-overlay {
-        display: block;
-        position: fixed;
-        inset: 0;
-        background: rgba(0,0,0,0.45);
-        z-index: 199;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.25s;
-    }
-    .sidebar-overlay.sidebar-overlay-active {
-        opacity: 1;
-        pointer-events: all;
-    }
+    .hamburger { display: flex; }
+    .sidebar-overlay { display: block; }
     .sidebar {
         position: fixed;
         top: 0;
@@ -796,7 +793,6 @@ body {
         transition: left 0.25s ease;
     }
     .sidebar.sidebar-open { left: 0; }
-    .hamburger.hidden { display: none; }
     .mgmt-main { padding: 24px 20px; padding-top: 72px; }
     .event-table thead { display: none; }
     .event-table tbody tr {
