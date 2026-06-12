@@ -51,7 +51,7 @@
                             <div class="member-avatar approved">{{ user.username|first|upper }}</div>
                             <div class="member-info">
                                 <p class="member-name">{{ user.first_name|default:user.username }}</p>
-                                <p class="member-meta">{{ user.email|default:"未填寫電子郵件" }}</p>
+                                <p class="member-meta">@{{ user.username }}</p>
                             </div>
                             <span class="member-badge">系學會成員</span>
                             <form method="post" class="member-action-form">
@@ -83,7 +83,7 @@
                             <div class="member-avatar">{{ user.username|first|upper }}</div>
                             <div class="member-info">
                                 <p class="member-name">{{ user.first_name|default:user.username }}</p>
-                                <p class="member-meta">{{ user.email|default:"未填寫電子郵件" }}</p>
+                                <p class="member-meta">@{{ user.username }}</p>
                             </div>
                             <form method="post" class="member-action-form">
                                 {% csrf_token %}
