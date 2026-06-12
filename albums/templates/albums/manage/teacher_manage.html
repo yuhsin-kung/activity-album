@@ -16,7 +16,7 @@
         <div class="mgmt-header">
             <div class="mgmt-header-text">
                 <p class="mgmt-eyebrow">Teachers</p>
-                <h1 class="mgmt-title">管理者設定</h1>
+                <h1 class="mgmt-title">管理員</h1>
                 <p class="mgmt-subtitle">授予或移除老師帳號權限</p>
             </div>
         </div>
@@ -30,18 +30,18 @@
         <div class="stats-row member-stats">
             <div class="stat-card">
                 <div class="stat-num">{{ teacher_users|length }}</div>
-                <div class="stat-label">老師帳號</div>
+                <div class="stat-label">已授權</div>
             </div>
             <div class="stat-card">
                 <div class="stat-num">{{ non_teacher_users|length }}</div>
-                <div class="stat-label">一般帳號</div>
+                <div class="stat-label">未授權</div>
             </div>
         </div>
 
         <section class="member-section">
             <div class="member-section-header">
-                <p class="mgmt-eyebrow">Teachers</p>
-                <h2>老師帳號</h2>
+                <p class="mgmt-eyebrow">Authorized</p>
+                <h2>已授權帳號</h2>
             </div>
             {% if teacher_users %}
                 <div class="member-list">
@@ -71,8 +71,8 @@
 
         <section class="member-section">
             <div class="member-section-header">
-                <p class="mgmt-eyebrow">Users</p>
-                <h2>一般帳號</h2>
+                <p class="mgmt-eyebrow">Unauthorized</p>
+                <h2>未授權帳號</h2>
             </div>
             {% if non_teacher_users %}
                 <div class="member-list">
