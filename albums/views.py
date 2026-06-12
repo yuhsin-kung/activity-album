@@ -275,9 +275,9 @@ class TeacherManagementView(TeacherRequiredMixin, ListView):
         if action == 'grant':
             user.is_staff = True
             user.save()
-            messages.success(request, f'已將 {user.username} 設為老師。')
+            messages.success(request, f'已將 {user.username} 設為管理員。')
         elif action == 'revoke':
             user.is_staff = False
             user.save()
-            messages.success(request, f'已移除 {user.username} 的老師身分。')
+            messages.success(request, f'已移除 {user.username} 的管理員身分。')
         return redirect('teacher-manage')
