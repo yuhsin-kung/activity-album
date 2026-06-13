@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth.models import Group, User
+from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
 from django.http import FileResponse
 from django.shortcuts import redirect
@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404
 
 from .forms import EventForm, PhotoUploadForm, DocumentUploadForm, MemberSignUpForm
 from .models import Event, EventPhoto, EventDocument
-from .permissions import TeacherRequiredMixin, MemberRequiredMixin, can_view_documents, MEMBER_GROUP
+from .permissions import TeacherRequiredMixin, MemberRequiredMixin, can_view_documents
 
 
 # ── 公開頁面 ──────────────────────────────────────────────
@@ -27,9 +27,7 @@ class EventListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
-        if user.is_authenticated and (
-            user.is_staff or user.groups.filter(name=MEMBER_GROUP).exists()
-        ):
+        if can_view_documents(user):
             today = timezone.now().date()
             context['future_events'] = Event.objects.filter(
                 start_date__gt=today
@@ -112,42 +110,34 @@ class MemberManagementView(TeacherRequiredMixin, ListView):
     template_name = 'albums/manage/member_manage.html'
     context_object_name = 'users'
 
-    def get_member_group(self):
-        group, _ = Group.objects.get_or_create(name=MEMBER_GROUP)
-        return group
-
     def get_queryset(self):
         return (
             User.objects
             .filter(is_staff=False, is_superuser=False)
-            .prefetch_related('groups')
+            .select_related('profile')
             .order_by('date_joined', 'username')
         )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        group = self.get_member_group()
         users = list(context['users'])
-        context['member_group'] = group
-        context['pending_users'] = [user for user in users if group not in user.groups.all()]
-        context['approved_users'] = [user for user in users if group in user.groups.all()]
+        context['pending_users'] = [u for u in users if not getattr(u, 'profile', None) or not u.profile.is_member]
+        context['approved_users'] = [u for u in users if getattr(u, 'profile', None) and u.profile.is_member]
         return context
 
     def post(self, request, *args, **kwargs):
-        group = self.get_member_group()
-        user = get_object_or_404(
-            User,
-            pk=request.POST.get('user_id'),
-            is_staff=False,
-            is_superuser=False,
-        )
+        from .models import UserProfile
+        user = get_object_or_404(User, pk=request.POST.get('user_id'), is_staff=False, is_superuser=False)
+        profile, _ = UserProfile.objects.get_or_create(user=user)
         action = request.POST.get('action')
 
         if action == 'approve':
-            user.groups.add(group)
+            profile.is_member = True
+            profile.save()
             messages.success(request, f'已核准 {user.username} 為系學會成員。')
         elif action == 'revoke':
-            user.groups.remove(group)
+            profile.is_member = False
+            profile.save()
             messages.success(request, f'已移除 {user.username} 的系學會成員資格。')
 
         return redirect('member-manage')
