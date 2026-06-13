@@ -661,11 +661,11 @@ body {
 }
 
 .home-section-label {
-    font-size: 13px;
+    font-family: "Noto Serif TC", serif;
+    font-size: 1.1rem;
     font-weight: 600;
-    letter-spacing: 0.12em;
-    color: #888;
-    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #111;
     margin: 0 0 20px;
 }
 
