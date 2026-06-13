@@ -255,6 +255,7 @@ class TeacherManagementView(TeacherRequiredMixin, ListView):
         return (
             User.objects
             .filter(is_superuser=False)
+            .select_related('profile')
             .order_by('date_joined', 'username')
         )
 
@@ -262,7 +263,10 @@ class TeacherManagementView(TeacherRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         users = list(context['users'])
         context['teacher_users'] = [u for u in users if u.is_staff]
-        context['non_teacher_users'] = [u for u in users if not u.is_staff]
+        context['non_teacher_users'] = [
+            u for u in users
+            if not u.is_staff and not (getattr(u, 'profile', None) and u.profile.is_member)
+        ]
         return context
 
     def post(self, request, *args, **kwargs):
