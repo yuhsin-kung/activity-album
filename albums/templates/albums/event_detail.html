@@ -39,7 +39,7 @@
         <div class="photo-grid">
             {% for photo in photos %}
                 <div class="photo-card">
-                    <img src="{{ photo.image.url }}" alt="{{ photo.caption }}">
+                    <img src="{{ photo.image.url }}" alt="{{ photo.caption|default:event.title }}">
                     {% if photo.caption %}
                         <div class="photo-card-overlay">
                             <div class="photo-card-caption">{{ photo.caption }}</div>

@@ -52,7 +52,7 @@
                     {% for photo in photos %}
                         <div class="photo-mgmt-card">
                             <div class="photo-mgmt-img">
-                                <img src="{{ photo.image.url }}" alt="{{ photo.caption }}">
+                                <img src="{{ photo.image.url }}" alt="{{ photo.caption|default:event.title }}">
                             </div>
                             <div class="photo-mgmt-body">
                                 <p class="photo-caption">{{ photo.caption|default:"—" }}</p>
