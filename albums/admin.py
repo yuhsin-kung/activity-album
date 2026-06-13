@@ -9,9 +9,9 @@ class PhotoInline(admin.TabularInline):
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('title', 'date', 'location', 'created_by')
+    list_display = ('title', 'start_date', 'end_date', 'location', 'created_by')
     search_fields = ('title', 'location')
-    list_filter = ('date',)
+    list_filter = ('start_date',)
     inlines = [PhotoInline]
 
 
