@@ -4,6 +4,7 @@ from django.contrib.auth.views import LoginView
 from django.http import FileResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
+from django.utils import timezone
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, TemplateView, UpdateView
 from django.shortcuts import get_object_or_404
 
@@ -17,7 +18,23 @@ from .permissions import TeacherRequiredMixin, MemberRequiredMixin, can_view_doc
 class EventListView(ListView):
     model = Event
     template_name = 'albums/event_list.html'
-    context_object_name = 'events'
+    context_object_name = 'past_events'
+
+    def get_queryset(self):
+        today = timezone.now().date()
+        return Event.objects.filter(start_date__lte=today).order_by('-start_date')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        if user.is_authenticated and (
+            user.is_staff or user.groups.filter(name=MEMBER_GROUP).exists()
+        ):
+            today = timezone.now().date()
+            context['future_events'] = Event.objects.filter(
+                start_date__gt=today
+            ).order_by('start_date')
+        return context
 
 
 class MemberLoginView(LoginView):

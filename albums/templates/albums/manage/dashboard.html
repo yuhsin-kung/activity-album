@@ -57,7 +57,7 @@
                                     {{ event.title }}
                                 </a>
                             </td>
-                            <td class="text-muted">{{ event.date|date:"Y/m/d" }}</td>
+                            <td class="text-muted">{{ event.start_date|date:"Y/m/d" }}{% if event.end_date %} – {{ event.end_date|date:"m/d" }}{% endif %}</td>
                             <td class="text-muted">{{ event.location|default:"—" }}</td>
                             <td><span class="photo-badge">{{ event.photos.count }}</span></td>
                             <td><span class="photo-badge doc-badge">{{ event.documents.count }}</span></td>

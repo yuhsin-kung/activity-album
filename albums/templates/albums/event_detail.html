@@ -13,7 +13,7 @@
 
 <div class="event-header">
     <p class="event-header-eyebrow">
-        {{ event.date|date:"Y.m.d" }}{% if event.location %}&nbsp;·&nbsp;{{ event.location }}{% endif %}
+        {{ event.start_date|date:"Y.m.d" }}{% if event.end_date %} – {{ event.end_date|date:"Y.m.d" }}{% endif %}{% if event.location %}&nbsp;·&nbsp;{{ event.location }}{% endif %}
     </p>
     <h1>{{ event.title }}</h1>
     {% if request.user.is_staff %}

@@ -6,7 +6,8 @@ from django.contrib.auth.models import User
 class Event(models.Model):
     title = models.CharField(max_length=200)          # 活動名稱
     description = models.TextField(blank=True)        # 活動說明
-    date = models.DateField()                         # 活動日期
+    start_date = models.DateField()
+    end_date = models.DateField(null=True, blank=True)
     location = models.CharField(max_length=200, blank=True)  # 活動地點
     created_by = models.ForeignKey(
         User,
@@ -18,7 +19,7 @@ class Event(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)  # 建立時間
 
     class Meta:
-        ordering = ['-date']
+        ordering = ['-start_date']
 
     def __str__(self):
         return self.title

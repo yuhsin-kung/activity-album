@@ -24,15 +24,21 @@ class MemberSignUpForm(UserCreationForm):
 
 
 class EventForm(forms.ModelForm):
-    date = forms.DateField(
-        label='活動日期',
+    start_date = forms.DateField(
+        label='活動開始日期',
+        widget=forms.DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),
+        input_formats=['%Y-%m-%d'],
+    )
+    end_date = forms.DateField(
+        label='活動結束日期',
+        required=False,
         widget=forms.DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),
         input_formats=['%Y-%m-%d'],
     )
 
     class Meta:
         model = Event
-        fields = ['title', 'description', 'date', 'location']
+        fields = ['title', 'description', 'start_date', 'end_date', 'location']
 
 
 class PhotoUploadForm(forms.ModelForm):

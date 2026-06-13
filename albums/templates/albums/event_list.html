@@ -15,12 +15,41 @@
 
     <header class="home-head">
         <h1 class="home-title">活動相簿</h1>
-        {% if events %}<span class="home-sub">{{ events|length }} activities</span>{% endif %}
     </header>
 
-    {% if events %}
+    {% if future_events %}
+    <div class="home-section-label">即將舉辦</div>
     <div class="card-grid">
-        {% for event in events %}
+        {% for event in future_events %}
+        {% with cover=event.photos.first %}
+        <a class="card card-future" href="{% url 'event-detail' event.id %}">
+            <div class="card-img">
+                {% if cover %}
+                    <img src="{{ cover.image.url }}" alt="{{ event.title }}">
+                {% else %}
+                    <div class="card-img-empty">
+                        <span>{{ event.start_date|date:"Y.m" }}</span>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="card-body">
+                <p class="card-date">
+                    {{ event.start_date|date:"Y.m.d" }}{% if event.end_date %} – {{ event.end_date|date:"Y.m.d" }}{% endif %}
+                    {% if event.location %} · {{ event.location }}{% endif %}
+                </p>
+                <h2 class="card-title">{{ event.title }}</h2>
+                {% if event.description %}<p class="card-desc">{{ event.description }}</p>{% endif %}
+            </div>
+        </a>
+        {% endwith %}
+        {% endfor %}
+    </div>
+    <div class="home-section-label">過去活動</div>
+    {% endif %}
+
+    {% if past_events %}
+    <div class="card-grid">
+        {% for event in past_events %}
         {% with cover=event.photos.first %}
         <a class="card" href="{% url 'event-detail' event.id %}">
             <div class="card-img">
@@ -28,12 +57,15 @@
                     <img src="{{ cover.image.url }}" alt="{{ event.title }}">
                 {% else %}
                     <div class="card-img-empty">
-                        <span>{{ event.date|date:"Y.m" }}</span>
+                        <span>{{ event.start_date|date:"Y.m" }}</span>
                     </div>
                 {% endif %}
             </div>
             <div class="card-body">
-                <p class="card-date">{{ event.date|date:"Y.m.d" }}{% if event.location %} · {{ event.location }}{% endif %}</p>
+                <p class="card-date">
+                    {{ event.start_date|date:"Y.m.d" }}{% if event.end_date %} – {{ event.end_date|date:"Y.m.d" }}{% endif %}
+                    {% if event.location %} · {{ event.location }}{% endif %}
+                </p>
                 <h2 class="card-title">{{ event.title }}</h2>
                 {% if event.description %}<p class="card-desc">{{ event.description }}</p>{% endif %}
                 <p class="card-count">{{ event.photos.count }} 張照片</p>
