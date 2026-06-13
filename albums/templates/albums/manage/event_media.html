@@ -41,12 +41,7 @@
                 <div class="inline-upload-row">
                     <div class="form-field inline-field">
                         <label for="id_image">選擇照片 <span class="field-required">必填</span></label>
-                        <input type="file" id="id_image" name="image" accept="image/*" required>
-                    </div>
-                    <div class="form-field inline-field" style="flex:2">
-                        <label for="id_caption">說明 <span class="field-hint">選填</span></label>
-                        <input type="text" id="id_caption" name="caption"
-                               placeholder="例：大合照、頒獎…" maxlength="300">
+                        <input type="file" id="id_image" name="image" accept="image/*" multiple required>
                     </div>
                     <button class="btn-primary inline-upload-btn" type="submit">上傳</button>
                 </div>
