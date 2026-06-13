@@ -261,12 +261,8 @@ class TeacherManagementView(TeacherRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         users = list(context['users'])
-        member_group_name = MEMBER_GROUP
         context['teacher_users'] = [u for u in users if u.is_staff]
-        context['non_teacher_users'] = [
-            u for u in users
-            if not u.is_staff and not u.groups.filter(name=member_group_name).exists()
-        ]
+        context['non_teacher_users'] = [u for u in users if not u.is_staff]
         return context
 
     def post(self, request, *args, **kwargs):
