@@ -18,8 +18,7 @@
     <h1>{{ event.title }}</h1>
     {% if request.user.is_staff %}
         <div class="event-header-actions">
-            <a class="primary-link" href="{% url 'photo-manage' event.pk %}">管理照片</a>
-            <a class="primary-link" href="{% url 'document-manage' event.pk %}">管理附件</a>
+            <a class="primary-link" href="{% url 'event-media' event.pk %}">照片／附件</a>
             <a class="secondary-link" href="{% url 'event-update' event.pk %}">編輯</a>
             <a class="danger-link" href="{% url 'event-delete' event.pk %}">刪除</a>
         </div>
