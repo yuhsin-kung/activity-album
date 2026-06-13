@@ -51,7 +51,14 @@
                 <div class="photo-mgmt-grid">
                     {% for photo in photos %}
                         <div class="photo-mgmt-card{% if event.cover_photo_id == photo.pk %} is-cover{% endif %}">
-                            <div class="photo-mgmt-img">
+                            <form id="cover-form-{{ photo.pk }}" method="post" action="{% url 'photo-set-cover' event.pk photo.pk %}">
+                                {% csrf_token %}
+                            </form>
+                            <div class="photo-mgmt-img"
+                                {% if event.cover_photo_id != photo.pk %}
+                                    onclick="if(confirm('將這張照片設為封面？')) document.getElementById('cover-form-{{ photo.pk }}').submit()"
+                                    style="cursor:pointer"
+                                {% endif %}>
                                 <img src="{{ photo.image.url }}" alt="{{ photo.caption|default:event.title }}">
                                 {% if event.cover_photo_id == photo.pk %}
                                     <span class="cover-badge">封面</span>
@@ -59,15 +66,7 @@
                             </div>
                             <div class="photo-mgmt-body">
                                 <p class="photo-caption">{{ photo.caption|default:"—" }}</p>
-                                <div class="photo-mgmt-actions">
-                                    {% if event.cover_photo_id != photo.pk %}
-                                        <form method="post" action="{% url 'photo-set-cover' event.pk photo.pk %}" style="display:inline">
-                                            {% csrf_token %}
-                                            <button class="btn-action btn-photo" type="submit">設為封面</button>
-                                        </form>
-                                    {% endif %}
-                                    <a class="btn-action btn-delete" href="{% url 'photo-delete' event.pk photo.pk %}">刪除</a>
-                                </div>
+                                <a class="btn-action btn-delete" href="{% url 'photo-delete' event.pk photo.pk %}">刪除</a>
                             </div>
                         </div>
                     {% endfor %}
