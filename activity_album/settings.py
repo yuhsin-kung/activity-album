@@ -105,6 +105,8 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+DATA_UPLOAD_MAX_NUMBER_FILES = 500
+
 # ──────────────────────────────────────────
 # Media files (照片 & 附件)
 # ──────────────────────────────────────────
