@@ -721,6 +721,45 @@ body {
     flex-shrink: 0;
 }
 
+/* ── Cover Modal ── */
+
+.cover-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+}
+
+.cover-modal-overlay.active {
+    display: flex;
+}
+
+.cover-modal-box {
+    background: white;
+    border-radius: 12px;
+    padding: 32px 36px;
+    max-width: 320px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+}
+
+.cover-modal-text {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111;
+    margin: 0 0 24px;
+}
+
+.cover-modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
 /* ── Danger Card ── */
 
 .danger-card {

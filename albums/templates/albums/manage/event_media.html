@@ -56,7 +56,7 @@
                             </form>
                             <div class="photo-mgmt-img"
                                 {% if event.cover_photo_id != photo.pk %}
-                                    onclick="if(confirm('將這張照片設為封面？')) document.getElementById('cover-form-{{ photo.pk }}').submit()"
+                                    onclick="openCoverModal('cover-form-{{ photo.pk }}')"
                                     style="cursor:pointer"
                                 {% endif %}>
                                 <img src="{{ photo.image.url }}" alt="{{ photo.caption|default:event.title }}">
@@ -135,5 +135,37 @@
 
     </main>
 </div>
+
+<!-- 設為封面確認 Modal -->
+<div id="cover-modal" class="cover-modal-overlay" onclick="closeCoverModal()">
+    <div class="cover-modal-box" onclick="event.stopPropagation()">
+        <p class="cover-modal-text">將這張照片設為封面？</p>
+        <div class="cover-modal-actions">
+            <button class="btn-primary" id="cover-modal-confirm">確定</button>
+            <button class="btn-secondary" onclick="closeCoverModal()">取消</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let pendingFormId = null;
+
+    function openCoverModal(formId) {
+        pendingFormId = formId;
+        document.getElementById('cover-modal').classList.add('active');
+    }
+
+    function closeCoverModal() {
+        pendingFormId = null;
+        document.getElementById('cover-modal').classList.remove('active');
+    }
+
+    document.getElementById('cover-modal-confirm').addEventListener('click', function () {
+        if (pendingFormId) {
+            document.getElementById(pendingFormId).submit();
+        }
+    });
+</script>
+
 </body>
 </html>
