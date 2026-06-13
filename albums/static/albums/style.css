@@ -660,6 +660,20 @@ body {
     text-transform: uppercase;
 }
 
+.home-section-label {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: #888;
+    text-transform: uppercase;
+    margin: 0 0 20px;
+}
+
+.home-section-label + .card-grid + .home-section-label,
+.card-grid + .home-section-label {
+    margin-top: 72px;
+}
+
 .card-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
