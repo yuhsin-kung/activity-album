@@ -24,6 +24,7 @@ urlpatterns = [
 
     # 照片管理
     path('manage/<int:event_pk>/photos/', views.PhotoManageView.as_view(), name='photo-manage'),
+    path('manage/<int:event_pk>/photos/<int:pk>/set-cover/', views.PhotoSetCoverView.as_view(), name='photo-set-cover'),
     path('manage/<int:event_pk>/photos/<int:pk>/delete/', views.PhotoDeleteView.as_view(), name='photo-delete'),
 
     # 附件管理

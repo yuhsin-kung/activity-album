@@ -50,13 +50,24 @@
             {% if photos %}
                 <div class="photo-mgmt-grid">
                     {% for photo in photos %}
-                        <div class="photo-mgmt-card">
+                        <div class="photo-mgmt-card{% if event.cover_photo_id == photo.pk %} is-cover{% endif %}">
                             <div class="photo-mgmt-img">
                                 <img src="{{ photo.image.url }}" alt="{{ photo.caption|default:event.title }}">
+                                {% if event.cover_photo_id == photo.pk %}
+                                    <span class="cover-badge">封面</span>
+                                {% endif %}
                             </div>
                             <div class="photo-mgmt-body">
                                 <p class="photo-caption">{{ photo.caption|default:"—" }}</p>
-                                <a class="btn-action btn-delete" href="{% url 'photo-delete' event.pk photo.pk %}">刪除</a>
+                                <div class="photo-mgmt-actions">
+                                    {% if event.cover_photo_id != photo.pk %}
+                                        <form method="post" action="{% url 'photo-set-cover' event.pk photo.pk %}" style="display:inline">
+                                            {% csrf_token %}
+                                            <button class="btn-action btn-photo" type="submit">設為封面</button>
+                                        </form>
+                                    {% endif %}
+                                    <a class="btn-action btn-delete" href="{% url 'photo-delete' event.pk photo.pk %}">刪除</a>
+                                </div>
                             </div>
                         </div>
                     {% endfor %}

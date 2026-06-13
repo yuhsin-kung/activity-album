@@ -5,6 +5,7 @@ from django.http import FileResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.utils import timezone
+from django.views import View
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, TemplateView, UpdateView
 from django.shortcuts import get_object_or_404
 
@@ -203,6 +204,15 @@ class PhotoManageView(TeacherRequiredMixin, CreateView):
                 uploaded_by=request.user,
             )
         return redirect(reverse('event-media', kwargs={'pk': event.pk}) + '#photos')
+
+
+class PhotoSetCoverView(TeacherRequiredMixin, View):
+    def post(self, request, event_pk, pk):
+        event = get_object_or_404(Event, pk=event_pk)
+        photo = get_object_or_404(EventPhoto, pk=pk, event=event)
+        event.cover_photo = photo
+        event.save()
+        return redirect(reverse('event-media', kwargs={'pk': event_pk}) + '#photos')
 
 
 class PhotoDeleteView(TeacherRequiredMixin, DeleteView):

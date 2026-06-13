@@ -20,11 +20,18 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 
 class Event(models.Model):
-    title = models.CharField(max_length=200)          # 活動名稱
-    description = models.TextField(blank=True)        # 活動說明
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
-    location = models.CharField(max_length=200, blank=True)  # 活動地點
+    location = models.CharField(max_length=200, blank=True)
+    cover_photo = models.ForeignKey(
+        'EventPhoto',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='cover_for_event',
+    )
     created_by = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,

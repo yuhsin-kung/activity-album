@@ -21,7 +21,7 @@
     <div class="home-section-label">即將舉辦</div>
     <div class="card-grid">
         {% for event in future_events %}
-        {% with cover=event.photos.first %}
+        {% with cover=event.cover_photo|default:event.photos.first %}
         <a class="card card-future" href="{% url 'event-detail' event.id %}">
             <div class="card-img">
                 {% if cover %}
@@ -50,7 +50,7 @@
     {% if past_events %}
     <div class="card-grid">
         {% for event in past_events %}
-        {% with cover=event.photos.first %}
+        {% with cover=event.cover_photo|default:event.photos.first %}
         <a class="card" href="{% url 'event-detail' event.id %}">
             <div class="card-img">
                 {% if cover %}
