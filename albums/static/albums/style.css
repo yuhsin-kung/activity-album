@@ -662,10 +662,10 @@ body {
 
 .home-section-label {
     font-family: "Noto Serif TC", serif;
-    font-size: 1.1rem;
+    font-size: 0.95rem;
     font-weight: 600;
     letter-spacing: 0.04em;
-    color: #888;
+    color: #111;
     margin: 0 0 20px;
 }
 
