@@ -179,33 +179,23 @@ class EventDeleteView(TeacherRequiredMixin, DeleteView):
 class PhotoManageView(TeacherRequiredMixin, CreateView):
     model = EventPhoto
     form_class = PhotoUploadForm
-    template_name = 'albums/manage/photo_manage.html'
 
     def get_event(self):
         return get_object_or_404(Event, pk=self.kwargs['event_pk'])
 
+    def get(self, request, *args, **kwargs):
+        return redirect(reverse('event-media', kwargs={'pk': self.kwargs['event_pk']}) + '#photos')
+
     def post(self, request, *args, **kwargs):
         event = self.get_event()
         files = request.FILES.getlist('image')
-        caption = request.POST.get('caption', '')
         for f in files:
             EventPhoto.objects.create(
                 event=event,
                 image=f,
-                caption=caption,
                 uploaded_by=request.user,
             )
         return redirect(reverse('event-media', kwargs={'pk': event.pk}) + '#photos')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        event = self.get_event()
-        context['event'] = event
-        context['photos'] = event.photos.all()
-        return context
-
-    def get_success_url(self):
-        return reverse('event-media', kwargs={'pk': self.kwargs['event_pk']}) + '#photos'
 
 
 class PhotoDeleteView(TeacherRequiredMixin, DeleteView):
@@ -219,22 +209,17 @@ class PhotoDeleteView(TeacherRequiredMixin, DeleteView):
 class DocumentManageView(TeacherRequiredMixin, CreateView):
     model = EventDocument
     form_class = DocumentUploadForm
-    template_name = 'albums/manage/document_manage.html'
 
     def get_event(self):
         return get_object_or_404(Event, pk=self.kwargs['event_pk'])
+
+    def get(self, request, *args, **kwargs):
+        return redirect(reverse('event-media', kwargs={'pk': self.kwargs['event_pk']}) + '#documents')
 
     def form_valid(self, form):
         form.instance.event = self.get_event()
         form.instance.uploaded_by = self.request.user
         return super().form_valid(form)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        event = self.get_event()
-        context['event'] = event
-        context['documents'] = event.documents.all()
-        return context
 
     def get_success_url(self):
         return reverse('event-media', kwargs={'pk': self.kwargs['event_pk']}) + '#documents'
